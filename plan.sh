@@ -20,4 +20,4 @@ terraform {
 EOF
 
 terraform init
-terraform plan
+terraform plan -no-color
