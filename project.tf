@@ -16,7 +16,7 @@ provider "google" {
 
 resource "random_id" "id" {
   byte_length = 4
-  prefix      = "${var.project_prefix}-"
+  prefix      = "${var.project_name}-"
 }
 
 resource "google_project" "project" {

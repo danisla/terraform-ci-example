@@ -2,8 +2,8 @@ variable "gke_node_count" {
   default = 3
 }
 
-variable "gke_admin_password" {
-  description = "Password for the HTTP Kubernetes API"
+resource "random_id" "gke_admin_password" {
+  byte_length = 15
 }
 
 data "google_compute_zones" "available" {
@@ -37,7 +37,7 @@ resource "google_container_cluster" "cluster1" {
 
   master_auth {
     username = "admin"
-    password = "${var.gke_admin_password}"
+    password = "${random_id.gke_admin_password.hex}"
   }
 
   node_config {
@@ -53,7 +53,7 @@ resource "google_container_cluster" "cluster1" {
 }
 
 output "cluster_endpoint" {
-  value = "https://admin:${var.gke_admin_password}@${google_container_cluster.cluster1.endpoint}"
+  value = "https://admin:${random_id.gke_admin_password.hex}@${google_container_cluster.cluster1.endpoint}"
 }
 
 output "cluster_zone" {
