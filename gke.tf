@@ -56,7 +56,7 @@ resource "google_container_cluster" "cluster1" {
 
 resource "google_container_node_pool" "np1" {
   name               = "node-pool-1"
-  zone               = "${data.google_compute_zones.available.names[0]}"
+  zone               = "${google_container_cluster.cluster1.zone}"
   cluster            = "${google_container_cluster.cluster1.name}"
   initial_node_count = 1
 }
