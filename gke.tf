@@ -54,6 +54,13 @@ resource "google_container_cluster" "cluster1" {
   depends_on = ["google_project_services.project"]
 }
 
+resource "google_container_node_pool" "np1" {
+  name               = "node-pool-1"
+  zone               = "${data.google_compute_zones.available.names[0]}"
+  cluster            = "${google_container_cluster.cluster1.name}"
+  initial_node_count = 1
+}
+
 output "cluster_endpoint" {
   value = "https://admin:${random_id.gke_admin_password.hex}@${google_container_cluster.cluster1.endpoint}"
 }
