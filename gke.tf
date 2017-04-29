@@ -50,6 +50,8 @@ resource "google_container_cluster" "cluster1" {
       "https://www.googleapis.com/auth/monitoring",
     ]
   }
+
+  depends_on = ["google_project_services.project"]
 }
 
 output "cluster_endpoint" {
