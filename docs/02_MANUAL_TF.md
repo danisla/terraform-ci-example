@@ -17,7 +17,8 @@ Set the terraform template variables:
 ```
 export TF_VAR_region=us-central1
 export TF_VAR_project_name=${USER}-terraform 
-export TF_VAR_gke_admin_password=$(openssl rand -base64 15)
+export TF_VAR_org_id=${ORG_ID}
+export TF_VAR_billing_account=${BILLING_ACCOUNT}
 ```
 
 Preview the terraform changes:
@@ -54,6 +55,31 @@ gcloud container clusters get-credentials cluster1
 
 ```
 kubectl cluster-info
+```
+
+## Adding a node pool
+
+
+```
+cat > gke_node_pools.tf <<EOF
+variable "gke_node_pool_count" {
+  default = 1
+}
+resource "google_container_node_pool" "np1" {
+  project            = "${google_project.project.project_id}"
+  name               = "node-pool-1"
+  zone               = "${data.google_compute_zones.available.names[0]}"
+  cluster            = "${google_container_cluster.cluster1.name}"
+  initial_node_count = "${var.gke_node_pool_count}"
+}
+EOF
+```
+
+Re-run terraform to apply the changes
+
+```
+terraform plan
+terraform apply
 ```
 
 ## Destroy the cluster and project

@@ -30,6 +30,7 @@ resource "google_container_cluster" "cluster1" {
   project = "${google_project.project.project_id}"
 
   name = "cluster1"
+  network = "${google_compute_network.cluster1-network.self_link}"
   zone = "${data.google_compute_zones.available.names[0]}"
   initial_node_count = "${var.gke_node_count}"
 
