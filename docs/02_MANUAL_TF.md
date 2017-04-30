@@ -57,11 +57,19 @@ gcloud container clusters get-credentials cluster1
 kubectl cluster-info
 ```
 
-## Adding a node pool
-
+### Kubernetes Hello World
 
 ```
-cat > gke_node_pools.tf <<EOF
+kubectl run hello-node --image=gcr.io/google-samples/node-hello:1.0 --port=8080
+kubectl expose deployment hello-node --type="LoadBalancer"
+```
+
+> NOTE that this creates a new deployment and a load balancer to expose the app.
+
+## Adding a node pool
+
+```
+cat > gke_node_pools.tf <<'EOF'
 variable "gke_node_pool_count" {
   default = 1
 }
@@ -74,6 +82,8 @@ resource "google_container_node_pool" "np1" {
 }
 EOF
 ```
+
+> NOTE that as of Terraform v0.9.4, the node types cannot be set and default to n1-standard-1 nodes.
 
 Re-run terraform to apply the changes
 
