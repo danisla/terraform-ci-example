@@ -23,7 +23,9 @@ export GOOGLE_CREDENTIALS=$(cat $CREDENTIALS_FILE)
 [[ -z "${TF_BACKEND_BUCKET}" ]] && echo "ERROR: TF_BACKEND_BUCKET is not set." && exit 1
 [[ -z "${REPO_BRANCH}" ]] && echo "ERROR: REPO_BRANCH is not set." && exit 1
 
-cat > backend.tf <<EOF
+BACKEND_FILE=backend-${TF_BACKEND_BUCKET}.tf
+
+cat > "${BACKEND_FILE}" <<EOF
 terraform {
   backend "gcs" {
     bucket = "${TF_BACKEND_BUCKET}"
@@ -34,5 +36,5 @@ EOF
 
 [[ ${ACTION,,} == "destroy" ]] && export FORCE_ARG="-force"
 
-terraform init
+terraform init -backend-config="${BACKEND_FILE}" -force-copy
 terraform ${ACTION} ${FORCE_ARG} -no-color
