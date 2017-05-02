@@ -1,6 +1,6 @@
 # Terraform Admin Project Setup
 
-Create a new GCP Project that we'll configure for Terraform. This project will not contain any resources but it will store the Terraform state using the [GCS remote backend](https://www.terraform.io/docs/backends/types/gcs.html) and you will configure a service account with permissions to create other projects.
+Create a new GCP Project that we'll configure for Terraform. This project will not contain any resources but it will store the Terraform state using the [GCS remote backend](https://www.terraform.io/docs/backends/types/gcs.html) and you will configure a service account with permissions to create other p
 
 ## Configure the gcloud sdk
 
@@ -19,6 +19,8 @@ Before continuing, ake sure your login user is a organization administrator with
 - `roles/resourcemanager.organizationAdmin`
 
 > You can add these roles from the `IAM & Admin > IAM` page for the _organization_
+
+> This user is typucally the IT Administrator for your company.
 
 ## Create the Terraform Admin account
 
@@ -76,10 +78,22 @@ gcloud iam service-accounts keys create ~/.config/gcloud/terraform-admin.json --
 Add roles to the organization for the terraform service account
 
 ```
-for role in owner billing.admin resourcemanager.organizationAdmin resourcemanager.projectCreator; do
-  gcloud beta organizations add-iam-policy-binding ${ORG_ID} --member serviceAccount:terraform@${TF_ADMIN_PROJECT}.iam.gserviceaccount.com --role roles/${role}
-done
+gcloud beta organizations add-iam-policy-binding ${ORG_ID} --member serviceAccount:terraform@${TF_ADMIN_PROJECT}.iam.gserviceaccount.com --role roles/viewer
 ```
+
+> Allow Terraform access info like available zones
+
+```
+gcloud beta organizations add-iam-policy-binding ${ORG_ID} --member serviceAccount:terraform@${TF_ADMIN_PROJECT}.iam.gserviceaccount.com --role roles/resourcemanager.projectCreator
+```
+
+> Allow Terraform create projects, required for `google_project` resource.
+
+```
+gcloud beta organizations add-iam-policy-binding ${ORG_ID} --member serviceAccount:terraform@${TF_ADMIN_PROJECT}.iam.gserviceaccount.com --role roles/storage.admin
+```
+
+> Allow Terraform write the tfstate file to GCS.
 
 ## Prepare the terraform environment
 
