@@ -1,3 +1,7 @@
+variable "k8s_version" {
+  default = "1.5.6"
+}
+
 variable "gke_node_count" {
   default = 3
 }
@@ -34,7 +38,7 @@ resource "google_container_cluster" "cluster1" {
   zone = "${data.google_compute_zones.available.names[0]}"
   initial_node_count = "${var.gke_node_count}"
 
-  #additional_zones = ["${slice(data.google_compute_zones.available.names, 1,  length(data.google_compute_zones.available.names))}"]
+  node_version = "${var.k8s_version}"
 
   master_auth {
     username = "admin"
