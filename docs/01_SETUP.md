@@ -75,25 +75,24 @@ gcloud iam service-accounts create terraform --display-name "Terraform admin acc
 gcloud iam service-accounts keys create ~/.config/gcloud/terraform-admin.json --iam-account terraform@${TF_ADMIN_PROJECT}.iam.gserviceaccount.com
 ```
 
-Add roles to the organization for the terraform service account
+### Add roles to the organization for the terraform service account
 
-```
-gcloud beta organizations add-iam-policy-binding ${ORG_ID} --member serviceAccount:terraform@${TF_ADMIN_PROJECT}.iam.gserviceaccount.com --role roles/viewer
-```
+Run the commands below to grant the terraform service account the following permissions:
 
-> Allow Terraform access info like available zones
+- `roles/resourcemanager.projectCreator`: Create projects
+- `roles/billing.user`: Assign billing accounts to projects.
+- `roles/storage.admin`: Read/Write the tfstate file to GCS
+- `roles/viewer`: View projects compute zones
 
 ```
 gcloud beta organizations add-iam-policy-binding ${ORG_ID} --member serviceAccount:terraform@${TF_ADMIN_PROJECT}.iam.gserviceaccount.com --role roles/resourcemanager.projectCreator
-```
 
-> Allow Terraform create projects, required for `google_project` resource.
+gcloud beta organizations add-iam-policy-binding ${ORG_ID} --member serviceAccount:terraform@${TF_ADMIN_PROJECT}.iam.gserviceaccount.com --role roles/billing.user
 
-```
 gcloud beta organizations add-iam-policy-binding ${ORG_ID} --member serviceAccount:terraform@${TF_ADMIN_PROJECT}.iam.gserviceaccount.com --role roles/storage.admin
-```
 
-> Allow Terraform write the tfstate file to GCS.
+gcloud beta organizations add-iam-policy-binding ${ORG_ID} --member serviceAccount:terraform@${TF_ADMIN_PROJECT}.iam.gserviceaccount.com --role roles/viewer
+```
 
 ## Prepare the terraform environment
 
