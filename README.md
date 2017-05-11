@@ -28,7 +28,7 @@
 
 ## Guide:
 
-1. [Terraform Admin Project Setup](./01_SETUP.md)
-2. [Manual Execution of Terraform](./02_MANUAL_TF.md)
-3. [Spinnaker Deployment and Configuration](./03_SPINNAKER_SETUP.md)
-4. [Create Spinnaker Pipelines for Terraform](./04_SPINNAKER_PIPELINES.md)
+1. [Terraform Admin Project Setup](./docs/01_SETUP.md)
+2. [Manual Execution of Terraform](./docs/02_MANUAL_TF.md)
+3. [Spinnaker Deployment and Configuration](./docs/03_SPINNAKER_SETUP.md)
+4. [Create Spinnaker Pipelines for Terraform](./docs/04_SPINNAKER_PIPELINES.md)
