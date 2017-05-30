@@ -1,5 +1,5 @@
 variable "k8s_version" {
-  default = "1.5.6"
+  default = "1.5.7"
 }
 
 variable "gke_node_count" {
