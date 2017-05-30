@@ -97,3 +97,7 @@ terraform apply
 ```
 terraform destroy
 ```
+
+-----
+
+Next: [Spinnaker Setup](./03_SPINNAKER_SETUP.md)

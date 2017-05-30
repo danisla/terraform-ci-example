@@ -12,7 +12,7 @@ gcloud compute ssh ${JENKINS_VM}
 Install terraform:
 
 ```
-export TERRAFORM_VERSION=0.9.4
+export TERRAFORM_VERSION=0.9.6
 sudo apt-get install -y unzip
 curl -LO https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip

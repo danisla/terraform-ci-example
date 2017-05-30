@@ -135,3 +135,7 @@ Initialize the backend:
 ```
 terraform init
 ```
+
+-----
+
+Next: [Manual Terraform Execution](./02_MANUAL_TF.md)
