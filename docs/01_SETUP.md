@@ -14,7 +14,6 @@ gcloud auth login
 
 Before continuing, ake sure your login user is a organization administrator with the following roles:
 
-- `roles/owner`
 - `roles/billing.admin`
 - `roles/resourcemanager.organizationAdmin`
 
@@ -49,7 +48,7 @@ gcloud projects create ${TF_ADMIN_PROJECT} --organization ${ORG_ID} --set-as-def
 ```
 
 ```
-gcloud alpha billing accounts projects link ${TF_ADMIN_PROJECT}--account-id ${BILLING_ACCOUNT}
+gcloud alpha billing accounts projects link ${TF_ADMIN_PROJECT} --account-id ${BILLING_ACCOUNT}
 ```
 
 Enable the APIs
@@ -75,23 +74,22 @@ gcloud iam service-accounts create terraform --display-name "Terraform admin acc
 gcloud iam service-accounts keys create ~/.config/gcloud/terraform-admin.json --iam-account terraform@${TF_ADMIN_PROJECT}.iam.gserviceaccount.com
 ```
 
+Grant the service account permission to view the admin project and manage GCS storage:
+
+```
+gcloud projects add-iam-policy-binding ${TF_ADMIN_PROJECT} --member serviceAccount:terraform@${TF_ADMIN_PROJECT}.iam.gserviceaccount.com --role roles/viewer
+
+gcloud projects add-iam-policy-binding ${TF_ADMIN_PROJECT} --member serviceAccount:terraform@${TF_ADMIN_PROJECT}.iam.gserviceaccount.com --role roles/storage.admin
+```
+
 ### Add roles to the organization for the terraform service account
 
-Run the commands below to grant the terraform service account the following permissions:
-
-- `roles/resourcemanager.projectCreator`: Create projects
-- `roles/billing.user`: Assign billing accounts to projects.
-- `roles/storage.admin`: Read/Write the tfstate file to GCS
-- `roles/viewer`: View projects compute zones
+Run the commands below to grant the terraform service account permission to create projects and assign billing accounts:
 
 ```
 gcloud beta organizations add-iam-policy-binding ${ORG_ID} --member serviceAccount:terraform@${TF_ADMIN_PROJECT}.iam.gserviceaccount.com --role roles/resourcemanager.projectCreator
 
 gcloud beta organizations add-iam-policy-binding ${ORG_ID} --member serviceAccount:terraform@${TF_ADMIN_PROJECT}.iam.gserviceaccount.com --role roles/billing.user
-
-gcloud beta organizations add-iam-policy-binding ${ORG_ID} --member serviceAccount:terraform@${TF_ADMIN_PROJECT}.iam.gserviceaccount.com --role roles/storage.admin
-
-gcloud beta organizations add-iam-policy-binding ${ORG_ID} --member serviceAccount:terraform@${TF_ADMIN_PROJECT}.iam.gserviceaccount.com --role roles/viewer
 ```
 
 ## Prepare the terraform environment
