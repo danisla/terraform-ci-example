@@ -1,4 +1,4 @@
-# Terraform Continuous Infrastructure with Terraform
+# Terraform Continuous Infrastructure with Spinnaker
 
 ## Goals
 
